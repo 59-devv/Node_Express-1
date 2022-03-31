@@ -1,0 +1,23 @@
+{
+  "name": "spa_mall",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/59-devv/Node_Express-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/59-devv/Node_Express-1/issues"
+  },
+  "homepage": "https://github.com/59-devv/Node_Express-1#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
