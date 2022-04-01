@@ -11,10 +11,11 @@ connect();
 // good.js에서 만들어준 router를 사용하기 위해, require를 사용해서 import 한다.
 // require 안에서 .js 확장자는 생략이 가능하다.
 const goodsRouter = require('./routes/goods');
+const cartsRouter = require('./routes/carts');
 
 const requestMiddleware = (req, res, next) => {
-  console.log(`Request URL: ${req.originalUrl}, ${new Date()}`);
-  next();
+    console.log(`Request URL: ${req.originalUrl}, ${new Date()}`);
+    next();
 };
 
 // body로 들어오는 json 데이터를 parsing 해주는 middleware
@@ -22,12 +23,12 @@ app.use(express.json());
 app.use(requestMiddleware);
 
 // router는 여러개 정의할 수 있다.
-app.use('/api', [goodsRouter]);
+app.use('/api', [goodsRouter, cartsRouter]);
 
 app.get('/', (req, res) => {
-  res.send('Hello Express!');
+    res.send('Hello Express!');
 });
 
 app.listen(port, () => {
-  console.log(`Server Started with port ${port}`);
+    console.log(`Server Started with port ${port}`);
 });
