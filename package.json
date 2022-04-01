@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/59-devv/Node_Express-1#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "mongoose": "^6.2.9"
   }
 }
