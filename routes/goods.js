@@ -8,7 +8,10 @@ router.get('/', (req, res) => {
 
 // 전체 목록 조회
 router.get('/goods', async (req, res) => {
-  const goods = await Goods.find();
+  const { category } = req.query;
+  console.log('category?', category);
+
+  const goods = await Goods.find({ category });
   res.json({
     // goods: goods,
     // 객체의 이름이 key와 똑같다면, 약식으로 하나만 써주어도 된다.
