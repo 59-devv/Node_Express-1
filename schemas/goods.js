@@ -23,4 +23,4 @@ const goodsSchema = new mongoose.Schema({
 });
 
 // mongoose.model() 의 첫번째 인자가 Collection의 이름이 되는 것이다.
-module.exports = mongoose.model('Items', goodsSchema);
+module.exports = mongoose.model('Goods', goodsSchema);
