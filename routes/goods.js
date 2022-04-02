@@ -32,6 +32,23 @@ router.get('/goods/:goodsId', async (req, res) => {
     });
 });
 
+// 장바구니 상품 조회
+router.get('/goods/cart', async (req, res) => {
+    const carts = await Carts.find();
+    // cart에 담긴 goods id들만 가져오기 위해, map을 사용함
+    const goodsIds = carts.map(cart => cart.goodsId);
+    const goods = await Goods.find({ goodsId: goodsIds });
+    res.json({
+        carts: carts.map(cart => {
+            return {
+                quantity: cart.quantity,
+                goods: goods.find(item => item.goodsId === cart.goodsId),
+            };
+        }),
+    });
+});
+
+// 장바구니에 상품 담기
 router.post('/goods/:goodsId/cart', async (req, res) => {
     const { goodsId } = req.params;
     const { quantity } = req.body;
@@ -48,6 +65,7 @@ router.post('/goods/:goodsId/cart', async (req, res) => {
     res.json({ success: true });
 });
 
+// 장바구니에 상품 삭제
 router.delete('/goods/:goodsId/cart', async (req, res) => {
     const { goodsId } = req.params;
 
@@ -59,11 +77,11 @@ router.delete('/goods/:goodsId/cart', async (req, res) => {
     res.json({ success: true });
 });
 
+// 상품 수량 수정
 router.put('/goods/:goodsId/cart', async (req, res) => {
     const { goodsId } = req.params;
     const { quantity } = req.body;
-    console.log(`goodsId: ${goodsId}`);
-    console.log(`quantity: ${quantity}`);
+
 
     const existsCarts = await Cart.find({ goodsId: Number(goodsId) });
     console.log(`existsCarts: ${existsCarts}`);
@@ -71,6 +89,13 @@ router.put('/goods/:goodsId/cart', async (req, res) => {
         return res.status(400).json({
             success: false,
             errorMessage: '장바구니에 상품이 없습니다.',
+        });
+    }
+
+    if (quantity <== 0) {
+        return res.status(400).json({
+            success: false,
+            errorMessage: '상품 수량은 1 미만일 수 없습니다.',
         });
     }
 
