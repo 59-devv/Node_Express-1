@@ -20,15 +20,14 @@ router.get('/goods', async (req, res) => {
     });
 });
 
-
 // 장바구니 상품 조회
 router.get('/goods/cart', async (req, res) => {
-    const carts = await Carts.find();
+    const carts = await Cart.find();
     // cart에 담긴 goods id들만 가져오기 위해, map을 사용함
     const goodsIds = carts.map(cart => cart.goodsId);
     const goods = await Goods.find({ goodsId: goodsIds });
     res.json({
-        carts: carts.map(cart => {
+        cart: carts.map(cart => {
             return {
                 quantity: cart.quantity,
                 goods: goods.find(item => item.goodsId === cart.goodsId),
@@ -42,10 +41,10 @@ router.get('/goods/:goodsId', async (req, res) => {
     // URL에서 가져올 때, goodId는 string이다.
     const { goodsId } = req.params;
 
-    const [detail] = await Goods.find({ goodsId: Number(goodsId) });
+    const [goods] = await Goods.find({ goodsId: Number(goodsId) });
 
     res.json({
-        detail,
+        goods,
     });
 });
 
@@ -83,24 +82,24 @@ router.put('/goods/:goodsId/cart', async (req, res) => {
     const { goodsId } = req.params;
     const { quantity } = req.body;
 
-
-    const existsCarts = await Cart.find({ goodsId: Number(goodsId) });
-    console.log(`existsCarts: ${existsCarts}`);
-    if (!existsCarts.length) {
-        return res.status(400).json({
-            success: false,
-            errorMessage: '장바구니에 상품이 없습니다.',
-        });
-    }
-
-    if (quantity <== 0) {
+    if (quantity < 1) {
         return res.status(400).json({
             success: false,
             errorMessage: '상품 수량은 1 미만일 수 없습니다.',
         });
     }
 
-    await Cart.updateOne({ goodsId: Number(goodsId) }, { $set: { quantity } });
+    const existsCarts = await Cart.find({ goodsId: Number(goodsId) });
+    console.log(`existsCarts: ${existsCarts}`);
+    if (!existsCarts.length) {
+        await Cart.create({ goodsId: Number(goodsId), quantity });
+    } else {
+        await Cart.updateOne(
+            { goodsId: Number(goodsId) },
+            { $set: { quantity } }
+        );
+    }
+
     res.json({ success: true });
 });
 
