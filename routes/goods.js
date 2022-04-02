@@ -20,17 +20,6 @@ router.get('/goods', async (req, res) => {
     });
 });
 
-// 특정 상품 조회
-router.get('/goods/:goodsId', async (req, res) => {
-    // URL에서 가져올 때, goodId는 string이다.
-    const { goodsId } = req.params;
-
-    const [detail] = await Goods.find({ goodsId: Number(goodsId) });
-
-    res.json({
-        detail,
-    });
-});
 
 // 장바구니 상품 조회
 router.get('/goods/cart', async (req, res) => {
@@ -45,6 +34,18 @@ router.get('/goods/cart', async (req, res) => {
                 goods: goods.find(item => item.goodsId === cart.goodsId),
             };
         }),
+    });
+});
+
+// 특정 상품 조회
+router.get('/goods/:goodsId', async (req, res) => {
+    // URL에서 가져올 때, goodId는 string이다.
+    const { goodsId } = req.params;
+
+    const [detail] = await Goods.find({ goodsId: Number(goodsId) });
+
+    res.json({
+        detail,
     });
 });
 
